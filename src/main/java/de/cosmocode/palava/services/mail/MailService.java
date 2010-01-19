@@ -24,7 +24,7 @@ import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
-import de.cosmocode.palava.Service;
+import de.cosmocode.palava.core.service.Service;
 
 /**
  * A {@link Service} used to send emails.
