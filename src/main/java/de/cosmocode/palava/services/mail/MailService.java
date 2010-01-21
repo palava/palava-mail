@@ -28,13 +28,13 @@ import de.cosmocode.palava.core.service.Service;
 
 public interface MailService extends Service {
 
-	@Deprecated
-	MimeMessage sendMessage(String template, String lang, Map<String, ?> params,  String... to) throws Exception;
-	
-	MimeMessage send(TemplateDescriptor descriptor, String lang, Map<String, ?> params) throws Exception;
-	
-	MimeMessage send(TemplateDescriptor descriptor, Locale locale, Map<String, ?> params) throws Exception;
-	
-	MimeMessage send(TemplateDescriptor descriptor, Map<String, ?> params) throws Exception;
-	
+    @Deprecated
+    MimeMessage sendMessage(String template, String lang, Map<String, ?> params,  String... to) throws Exception;
+    
+    MimeMessage send(TemplateDescriptor descriptor, String lang, Map<String, ?> params) throws Exception;
+    
+    MimeMessage send(TemplateDescriptor descriptor, Locale locale, Map<String, ?> params) throws Exception;
+    
+    MimeMessage send(TemplateDescriptor descriptor, Map<String, ?> params) throws Exception;
+    
 }
