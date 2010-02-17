@@ -7,7 +7,7 @@
     <version>2.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>de.cosmocode.palava.services</groupId>
+  <groupId>de.cosmocode.palava</groupId>
   <artifactId>palava-mail</artifactId>
   <scm>
   	<developerConnection>scm:svn:https://palava.svn.cosmocode.de/palava-mail/trunk</developerConnection>
