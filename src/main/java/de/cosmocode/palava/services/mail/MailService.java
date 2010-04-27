@@ -24,8 +24,11 @@ import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
-import de.cosmocode.palava.core.Service;
-
+/**
+ * A service 
+ *
+ * @author Willi Schoenborn
+ */
 public interface MailService {
 
     @Deprecated
