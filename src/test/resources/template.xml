@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mail xsi:noNamespaceSchemaLocation="template.xsd">
+  <subject>Erfolgreiche Aktivierung Ihres TheLabelFinder-Accounts</subject>
+  <from>${sender}</from>
+  <to name="${contact.getFirstname()} ${contact.getLastname()}">${contact.getAddressContact().getEmail()}</to>
+  <message type="plain"><![CDATA[
+Hallo ${contact.getFirstname()} ${contact.getLastname()},
+
+Sie haben Ihr Account erfolgreich aktiviert. Anbei erhalten Sie Ihren Benutzernamen:
+
+Benutzername: ${contact.getUsername()}
+
+Hiermit können sie sich jederzeit unter http://pa.thelabelfinder.de
+einloggen und Ihr Profil verwalten.
+
+#parse("de/footer")
+  ]]></message>
+</mail>
