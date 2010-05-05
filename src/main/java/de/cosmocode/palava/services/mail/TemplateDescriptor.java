@@ -21,6 +21,6 @@ package de.cosmocode.palava.services.mail;
 
 public interface TemplateDescriptor {
 
-    public String getName();
+    String getName();
     
 }

@@ -20,6 +20,15 @@
 
 package de.cosmocode.palava.mail;
 
+import java.util.Locale;
+import java.util.Map;
+
+import de.cosmocode.palava.services.mail.TemplateDescriptor;
+
 public interface TemplateEngine {
 
+    MailBody merge(TemplateDescriptor descriptor, Map<? extends CharSequence, ? extends Object> data);
+    
+    MailBody merge(TemplateDescriptor descriptor, Map<? extends CharSequence, ? extends Object> data, Locale locale);
+    
 }
