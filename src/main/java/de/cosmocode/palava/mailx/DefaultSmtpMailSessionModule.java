@@ -18,8 +18,23 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mail;
+package de.cosmocode.palava.mailx;
 
-public interface Person {
+import com.google.inject.Binder;
+import com.google.inject.Module;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.mail.Session;
+
+/**
+ * @author Tobias Sarnowski
+ */
+public class DefaultSmtpMailSessionModule implements Module {
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultSmtpMailSessionModule.class);
+
+    @Override
+    public void configure(Binder binder) {
+        binder.bind(Session.class).toProvider(DefaultSmtpMailSessionProvider.class);
+    }
 }
