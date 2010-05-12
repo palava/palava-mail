@@ -14,30 +14,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
  */
 
 package de.cosmocode.palava.mail;
 
+import com.google.inject.BindingAnnotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * Indicates an error while sending an email.
- *
- * @author Willi Schoenborn
+ * @author Tobias Sarnowski
  */
-public final class MailException extends Exception {
-
-    private static final long serialVersionUID = 7997745774039875871L;
-    
-    public MailException(String message) {
-        super(message);
-    }
-    
-    public MailException(Throwable throwable) {
-        super(throwable);
-    }
-
-    public MailException(String message, Throwable throwable) {
-        super(message, throwable);
-    }
-    
+@BindingAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SmtpAuthenticator {
 }

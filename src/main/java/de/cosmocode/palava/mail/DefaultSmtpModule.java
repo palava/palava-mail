@@ -18,10 +18,11 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mailx;
+package de.cosmocode.palava.mail;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
+import com.google.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,11 +31,12 @@ import javax.mail.Session;
 /**
  * @author Tobias Sarnowski
  */
-public class DefaultSmtpMailSessionModule implements Module {
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultSmtpMailSessionModule.class);
+public class DefaultSmtpModule implements Module {
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultSmtpModule.class);
 
     @Override
     public void configure(Binder binder) {
-        binder.bind(Session.class).toProvider(DefaultSmtpMailSessionProvider.class);
+        binder.bind(DefaultSmtpProvider.class).in(Singleton.class);
+        binder.bind(Session.class).annotatedWith(Smtp.class).toProvider(DefaultSmtpProvider.class);
     }
 }

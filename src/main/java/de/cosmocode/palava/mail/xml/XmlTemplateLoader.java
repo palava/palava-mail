@@ -18,17 +18,18 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mailx;
+package de.cosmocode.palava.mail.xml;
 
-import com.google.inject.BindingAnnotation;
+import de.cosmocode.palava.mail.templating.Content;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Tobias Sarnowski
  */
-@BindingAnnotation
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ImapMailSessionAuthenticator {
+public interface XmlTemplateLoader {
+
+    Content load(String name, Locale locale);
+
 }

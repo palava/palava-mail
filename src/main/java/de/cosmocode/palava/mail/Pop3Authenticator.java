@@ -20,24 +20,15 @@
 
 package de.cosmocode.palava.mail;
 
-import java.util.Locale;
-import java.util.Map;
+import com.google.inject.BindingAnnotation;
 
-import javax.mail.internet.MimeMessage;
-
-import de.cosmocode.palava.services.mail.TemplateDescriptor;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
- * 
- *
- * @since 2.0
- * @author Willi Schoenborn
+ * @author Tobias Sarnowski
  */
-public interface EmailService {
-
-    MimeMessage send(TemplateDescriptor descriptor, Map<? extends CharSequence, ? extends Object> data) throws MailException;
-    
-    MimeMessage send(TemplateDescriptor descriptor, Map<? extends CharSequence, ? extends Object> data, Locale locale) 
-        throws MailException;
-    
+@BindingAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Pop3Authenticator {
 }

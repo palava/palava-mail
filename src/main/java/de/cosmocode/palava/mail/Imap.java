@@ -20,15 +20,15 @@
 
 package de.cosmocode.palava.mail;
 
-import java.util.Locale;
-import java.util.Map;
+import com.google.inject.BindingAnnotation;
 
-import de.cosmocode.palava.services.mail.TemplateDescriptor;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-public interface TemplateEngine {
-
-    MailBody merge(TemplateDescriptor descriptor, Map<? extends CharSequence, ? extends Object> data);
-    
-    MailBody merge(TemplateDescriptor descriptor, Map<? extends CharSequence, ? extends Object> data, Locale locale);
-    
+/**
+ * @author Tobias Sarnowski
+ */
+@BindingAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Imap {
 }

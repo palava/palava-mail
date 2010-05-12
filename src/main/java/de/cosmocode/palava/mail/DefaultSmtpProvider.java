@@ -18,7 +18,7 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mailx;
+package de.cosmocode.palava.mail;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -34,8 +34,8 @@ import java.util.Properties;
 /**
  * @author Tobias Sarnowski
  */
-final class DefaultSmtpMailSessionProvider implements Provider<Session> {
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultSmtpMailSessionProvider.class);
+final class DefaultSmtpProvider implements Provider<Session> {
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultSmtpProvider.class);
 
     private String smtpHost = "localhost";
     private int smtpPort = 25;
@@ -47,32 +47,32 @@ final class DefaultSmtpMailSessionProvider implements Provider<Session> {
     private boolean debug = false;
 
     @Inject(optional = true)
-    public void setDebug(@Named(MailSessionConfig.DEBUG) boolean debug) {
+    public void setDebug(@Named(SmtpConfig.DEBUG) boolean debug) {
         this.debug = debug;
     }
 
     @Inject(optional = true)
-    public void setSmtpHost(@Named(MailSessionConfig.SMTP_HOST) String smtpHost) {
+    public void setSmtpHost(@Named(SmtpConfig.HOST) String smtpHost) {
         this.smtpHost = smtpHost;
     }
 
     @Inject(optional = true)
-    public void setSmtpPort(@Named(MailSessionConfig.SMTP_PORT) int smtpPort) {
+    public void setSmtpPort(@Named(SmtpConfig.PORT) int smtpPort) {
         this.smtpPort = smtpPort;
     }
 
     @Inject(optional = true)
-    public void setSmtpUser(@Named(MailSessionConfig.SMTP_USER) String smtpUser) {
+    public void setSmtpUser(@Named(SmtpConfig.USER) String smtpUser) {
         this.smtpUser = smtpUser;
     }
 
     @Inject(optional = true)
-    public void setSmtpPassword(@Named(MailSessionConfig.SMTP_PASSWORD) String smtpPassword) {
+    public void setSmtpPassword(@Named(SmtpConfig.PASSWORD) String smtpPassword) {
         this.smtpPassword = smtpPassword;
     }
 
     @Inject(optional = true)
-    public void setSmtpAuthenticator(@SmtpMailSessionAuthenticator Authenticator smtpAuthenticator) {
+    public void setSmtpAuthenticator(@SmtpAuthenticator Authenticator smtpAuthenticator) {
         this.smtpAuthenticator = smtpAuthenticator;
     }
 

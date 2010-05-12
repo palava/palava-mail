@@ -20,6 +20,18 @@
 
 package de.cosmocode.palava.mail;
 
-public interface Person {
+/**
+ * @author Tobias Sarnowski
+ */
+public class Pop3Config {
+
+    public static final String PREFIX = MailConfig.PREFIX + "pop3.";
+
+    public static final String DEBUG = PREFIX + "debug";
+
+    public static final String HOST = PREFIX + "host";
+    public static final String PORT = PREFIX + "port";
+    public static final String USER = PREFIX + "user";
+    public static final String PASSWORD = PREFIX + "password";
 
 }

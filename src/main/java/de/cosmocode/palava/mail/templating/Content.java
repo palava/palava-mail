@@ -18,19 +18,30 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mailx;
+package de.cosmocode.palava.mail.templating;
 
-import com.google.inject.BindingAnnotation;
+import de.cosmocode.palava.mail.attachments.Attachment;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
 
 /**
  * @author Tobias Sarnowski
  */
-@BindingAnnotation
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SmtpMailSessionAuthenticator {
+public interface Content {
+
+    /**
+     * @return the mail subject
+     */
+    public String getSubject();
+
+    /**
+     * @return the mail body
+     */
+    public String getBody();
+
+    /**
+     * @return the list of attachments
+     */
+    public List<Attachment> getAttachments();
+
 }

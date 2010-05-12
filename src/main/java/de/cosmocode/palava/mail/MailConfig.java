@@ -18,17 +18,13 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mailx;
-
-import com.google.inject.BindingAnnotation;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+package de.cosmocode.palava.mail;
 
 /**
  * @author Tobias Sarnowski
  */
-@BindingAnnotation
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PopMailSession {
+public class MailConfig {
+
+    public static final String PREFIX = "mail.";
+
 }

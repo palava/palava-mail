@@ -18,17 +18,22 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mailx;
+package de.cosmocode.palava.mail.xml;
 
-import com.google.inject.BindingAnnotation;
+import de.cosmocode.palava.mail.templating.Content;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.util.Locale;
 
 /**
  * @author Tobias Sarnowski
  */
-@BindingAnnotation
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SmtpMailSession {
+public class FileXmlTemplateLoader implements XmlTemplateLoader {
+    private static final Logger LOG = LoggerFactory.getLogger(FileXmlTemplateLoader.class);
+
+    @Override
+    public Content load(String name, Locale locale) {
+        return null;
+    }
 }

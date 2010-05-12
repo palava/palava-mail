@@ -18,17 +18,15 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mailx;
+package de.cosmocode.palava.mail.templating;
 
-import com.google.inject.BindingAnnotation;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.util.Map;
 
 /**
  * @author Tobias Sarnowski
  */
-@BindingAnnotation
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ImapMailSession {
+public interface TemplateEngine {
+
+    public Content generate(Content content, Map<? extends CharSequence,? extends Object> variables);
+
 }

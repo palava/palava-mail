@@ -18,17 +18,20 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mailx;
-
-import com.google.inject.BindingAnnotation;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+package de.cosmocode.palava.mail;
 
 /**
  * @author Tobias Sarnowski
  */
-@BindingAnnotation
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PopMailSessionAuthenticator {
+public class SmtpConfig {
+
+    public static final String PREFIX = MailConfig.PREFIX + "smtp.";
+
+    public static final String DEBUG = PREFIX + "debug";
+
+    public static final String HOST = PREFIX + "host";
+    public static final String PORT = PREFIX + "port";
+    public static final String USER = PREFIX + "user";
+    public static final String PASSWORD = PREFIX + "password";
+
 }

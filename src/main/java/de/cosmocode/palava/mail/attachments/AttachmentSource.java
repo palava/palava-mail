@@ -18,34 +18,15 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mail;
+package de.cosmocode.palava.mail.attachments;
 
-import java.util.Set;
+import java.util.Map;
 
-import de.cosmocode.palava.services.mail.ContentType;
+/**
+ * @author Tobias Sarnowski
+ */
+public interface AttachmentSource {
 
-public interface MailBody {
+    public Attachment generate(Map<String,String> configuration);
 
-    ContentType getContentType();
-    
-    String getSubject();
-    
-    String getSender();
-
-    Set<Person> getReceiver();
-    
-    Set<Person> getCarbonCopy();
-    
-    Set<Person> getBlindCarbonCopy();
-    
-    Set<Person> getReplyTo();
-    
-    String getHtmlMessage();
-    
-    String getTextMessage();
-    
-    Set<Binary> getEmbeddedContent();
-    
-    Set<Binary> getAttachments();
-    
 }
