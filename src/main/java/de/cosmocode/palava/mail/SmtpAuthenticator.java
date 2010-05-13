@@ -28,6 +28,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * TODO why not use @Smtp Authenticator instead?
+ * 
  * @author Tobias Sarnowski
  */
 @BindingAnnotation
