@@ -20,6 +20,8 @@
 
 package de.cosmocode.palava.mail.templating;
 
+import de.cosmocode.palava.mail.xml.LocalizedXmlMailTemplate;
+
 import java.util.Map;
 
 /**
@@ -27,6 +29,6 @@ import java.util.Map;
  */
 public interface TemplateEngine {
 
-    public Content generate(Content content, Map<? extends CharSequence,? extends Object> variables);
+    public LocalizedXmlMailTemplate generate(LocalizedXmlMailTemplate template, Map<? extends CharSequence,? extends Object> variables);
 
 }

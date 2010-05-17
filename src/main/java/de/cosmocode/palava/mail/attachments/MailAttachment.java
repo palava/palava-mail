@@ -18,22 +18,23 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mail.xml;
+package de.cosmocode.palava.mail.attachments;
 
-import de.cosmocode.palava.mail.templating.Content;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Locale;
+import java.io.InputStream;
 
 /**
  * @author Tobias Sarnowski
  */
-public class FileXmlTemplateLoader implements XmlTemplateLoader {
-    private static final Logger LOG = LoggerFactory.getLogger(FileXmlTemplateLoader.class);
+public interface MailAttachment {
 
-    @Override
-    public Content load(String name, Locale locale) {
-        return null;
-    }
+    /**
+     * @return the attachments readable name e.g. "MyDocument.doc"
+     */
+    public String getName();
+
+    /**
+     * @return the binary source
+     */
+    public InputStream getContent();
+
 }

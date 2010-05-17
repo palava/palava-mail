@@ -20,16 +20,40 @@
 
 package de.cosmocode.palava.mail.xml;
 
-import de.cosmocode.palava.mail.templating.Content;
+import de.cosmocode.palava.mail.attachments.MailAttachment;
+import de.cosmocode.palava.mail.templating.TemplateEngine;
 
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author Tobias Sarnowski
  */
-public interface XmlTemplateLoader {
+public interface LocalizedXmlMailTemplate {
 
-    Content load(String name, Locale locale);
+    /**
+     * @return the mail subject
+     */
+    String getSubject();
+
+    /**
+     * @return the mail body
+     */
+    String getBody();
+
+    /**
+     * @return snippets that can be used within the template
+     */
+    Map<String,String> getSnippets();
+
+    /**
+     * @return the list of attachments
+     */
+    Map<String,XmlMailAttachment> getAttachments();
+
+    /**
+     * @return the class, used as template engine
+     */
+    Class<? extends TemplateEngine> getTemplateEngine();
 
 }

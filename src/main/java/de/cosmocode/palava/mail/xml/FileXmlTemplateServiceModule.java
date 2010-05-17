@@ -18,30 +18,22 @@
  * MA  02110-1301, USA.
  */
 
-package de.cosmocode.palava.mail.templating;
+package de.cosmocode.palava.mail.xml;
 
-import de.cosmocode.palava.mail.attachments.Attachment;
-
-import java.util.List;
+import com.google.inject.Binder;
+import com.google.inject.Module;
+import de.cosmocode.palava.mail.MailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Tobias Sarnowski
  */
-public interface Content {
+public class FileXmlTemplateServiceModule implements Module {
+    private static final Logger LOG = LoggerFactory.getLogger(FileXmlTemplateServiceModule.class);
 
-    /**
-     * @return the mail subject
-     */
-    public String getSubject();
-
-    /**
-     * @return the mail body
-     */
-    public String getBody();
-
-    /**
-     * @return the list of attachments
-     */
-    public List<Attachment> getAttachments();
-
+    @Override
+    public void configure(Binder binder) {
+        binder.bind(MailService.class).to(FileXmlTemplateService.class).asEagerSingleton();
+    }
 }

@@ -25,8 +25,8 @@ import java.util.Map;
 /**
  * @author Tobias Sarnowski
  */
-public interface AttachmentSource {
+public interface MailAttachmentSource {
 
-    public Attachment generate(Map<String,String> configuration);
+    public MailAttachment generate(String name, Map<String,String> configuration);
 
 }
