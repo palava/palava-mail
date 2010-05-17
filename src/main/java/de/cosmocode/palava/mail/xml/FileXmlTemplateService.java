@@ -69,7 +69,7 @@ class FileXmlTemplateService implements MailService, Initializable {
     public FileXmlTemplateService(@Named(FileXmlTemplateServiceConfig.DIRECTORY) File directory) {
         this.directory = directory;
 
-        schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
+        schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
             schema = schemaFactory.newSchema(XSD);
         } catch (SAXException e) {
@@ -100,6 +100,7 @@ class FileXmlTemplateService implements MailService, Initializable {
     }
 
     private void loadFile(File file) {
+        LOG.info("Loading Mail template {}", file);
         try {
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document doc = builder.parse(file);
