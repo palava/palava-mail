@@ -16,13 +16,17 @@
 
 package de.cosmocode.palava.mail.templating;
 
+import de.cosmocode.palava.mail.sources.MailAttachmentSource;
+
 import java.util.Map;
 
 /**
  * @author Tobias Sarnowski
  */
-public interface TemplateEngine {
+public interface MailAttachmentTemplate {
+    String getName();
 
-    public LocalizedMailTemplate generate(LocalizedMailTemplate template, Map<? extends CharSequence,? extends Object> variables);
+    Class<? extends MailAttachmentSource> getSource();
 
+    Map<String, String> getConfiguration();
 }

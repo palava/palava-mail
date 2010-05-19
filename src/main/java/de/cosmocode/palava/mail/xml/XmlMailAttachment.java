@@ -16,35 +16,48 @@
 
 package de.cosmocode.palava.mail.xml;
 
-import de.cosmocode.palava.mail.attachments.MailAttachmentSource;
+import de.cosmocode.palava.mail.sources.MailAttachmentSource;
+import de.cosmocode.palava.mail.templating.MailAttachmentTemplate;
+import de.cosmocode.palava.mail.xml.gen.AttachmentType;
+import de.cosmocode.palava.mail.xml.gen.ConfigType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Node;
 
-import java.io.File;
 import java.util.Map;
 
 /**
  * @author Tobias Sarnowski
  */
-public class XmlMailAttachment {
+public class XmlMailAttachment implements MailAttachmentTemplate {
     private static final Logger LOG = LoggerFactory.getLogger(XmlMailAttachment.class);
 
     private String name;
     private Class<? extends MailAttachmentSource> source;
     private Map<String,String> configuration;
 
-    public XmlMailAttachment(Node xml) {
+    public XmlMailAttachment(AttachmentType attachment) {
+        name = attachment.getName();
+        try {
+            source = (Class<? extends MailAttachmentSource>) Class.forName(attachment.getSource());
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException(e);
+        }
+        for (ConfigType config: attachment.getConfig()) {
+            configuration.put(config.getName(), config.getValue());
+        }
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public Class<? extends MailAttachmentSource> getSource() {
         return source;
     }
 
+    @Override
     public Map<String, String> getConfiguration() {
         return configuration;
     }

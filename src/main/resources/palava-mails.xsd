@@ -33,9 +33,9 @@
     <xs:complexType name="mailType">
         <xs:sequence>
             <xs:element name="default" type="pm:defaultType" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="localized" type="pm:localizedType" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="localized" type="pm:localizedType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute name="name" type="xs:string" default="MyMail"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="abstractTemplateType" abstract="true">
@@ -45,7 +45,7 @@
             <xs:element name="embedded" type="pm:attachmentType"  minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="attachment" type="pm:attachmentType"  minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute name="templateEngine" type="xs:string" use="optional" default="de.cosmocode.palava.mail.templating.velocity.VelocityTemplateEngine"/>
+        <xs:attribute name="templateEngine" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="defaultType">
@@ -61,7 +61,7 @@
     <xs:complexType name="localizedType">
         <xs:complexContent>
             <xs:extension base="pm:abstractTemplateType">
-                <xs:attribute name="locale" type="xs:string" default="en_US"/>
+                <xs:attribute name="locale" type="xs:string" use="required"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -69,7 +69,7 @@
     <xs:complexType name="snippetType">
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute name="name" type="xs:string" default="MySnippet"/>
+                <xs:attribute name="name" type="xs:string" use="required"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -78,13 +78,13 @@
         <xs:sequence>
             <xs:element name="config" type="pm:configType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute name="name" type="xs:string" default="MyDocument.doc"/>
-        <xs:attribute name="source" type="xs:string" default="de.cosmocode.palava.mail.attachments.LocalFileAttachment"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="source" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="configType">
-        <xs:attribute name="name" type="xs:string" default="configuration_key"/>
-        <xs:attribute name="value" type="xs:string" default="configuration_value"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string" use="required"/>
     </xs:complexType>
 
 </xs:schema>

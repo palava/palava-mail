@@ -22,12 +22,13 @@ import com.google.inject.name.Named;
 import de.cosmocode.palava.core.lifecycle.Initializable;
 import de.cosmocode.palava.core.lifecycle.LifecycleException;
 import de.cosmocode.palava.mail.MailService;
+import de.cosmocode.palava.mail.templating.LocalizedMailTemplate;
+import de.cosmocode.palava.mail.templating.MailTemplate;
+import de.cosmocode.palava.mail.xml.gen.MailType;
+import de.cosmocode.palava.mail.xml.gen.MailsType;
+import de.cosmocode.palava.mail.xml.gen.ObjectFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.mail.Message;
@@ -35,13 +36,13 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
@@ -55,79 +56,80 @@ class FileXmlTemplateService implements MailService, Initializable {
 
     private static final URL XSD = FileXmlTemplateService.class.getResource("/palava-mails.xsd");
 
-    private final DocumentBuilderFactory builderFactory;
-    private final SchemaFactory schemaFactory;
-
-    private final Schema schema;
+    private Unmarshaller unmarshaller;
 
     private File directory;
 
     private Map<String, XmlMailTemplate> templates = Maps.newHashMap();
 
 
+
     @Inject
     public FileXmlTemplateService(@Named(FileXmlTemplateServiceConfig.DIRECTORY) File directory) {
         this.directory = directory;
 
-        schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema;
         try {
             schema = schemaFactory.newSchema(XSD);
         } catch (SAXException e) {
             throw new IllegalArgumentException(e);
         }
 
-        builderFactory = DocumentBuilderFactory.newInstance();
-        builderFactory.setSchema(schema);
+        try {
+            JAXBContext jc = JAXBContext.newInstance(ObjectFactory.class.getPackage().getName());
+            unmarshaller = jc.createUnmarshaller();
+            unmarshaller.setSchema(schema);
+        } catch (JAXBException e) {
+            LOG.error("An exception occured!", e);
+        }
     }
 
     @Override
     public void initialize() throws LifecycleException {
         LOG.debug("Loading mail templates from {}", directory);
         loadFileRecursivly(directory);
+        LOG.info("Loaded {} mail templates.", templates.size());
     }
 
     private void loadFileRecursivly(File dir) {
+        LOG.trace("Looking in directory {}...", dir);
         for (String name: dir.list()) {
-            File file = new File(name).getAbsoluteFile();
+            File file = new File(dir, name).getAbsoluteFile();
             if (file.isFile()) {
                 if (file.toString().endsWith(".xml")) {
                     loadFile(file);
+                } else {
+                    LOG.trace("File {} is no Mail Template", file);
                 }
             } else if (file.isDirectory()) {
                 loadFileRecursivly(file);
+            } else {
+                LOG.warn("{} is not a directory or file?!", file);
             }
         }
     }
 
     private void loadFile(File file) {
-        LOG.info("Loading Mail template {}", file);
+        LOG.debug("Loading Mail template {}", file);
         try {
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            Document doc = builder.parse(file);
-            Element root = doc.getDocumentElement();
+            JAXBElement<MailsType> element = (JAXBElement<MailsType>)unmarshaller.unmarshal(file);
+            MailsType mails = element.getValue();
 
-            NodeList mails = doc.getChildNodes();
-            for (int childId = 0; childId < mails.getLength(); childId++) {
-                Node mail = mails.item(childId);
-                String mailId = mail.getAttributes().getNamedItem("id").getNodeValue();
-
+            for (MailType mail: mails.getMail()) {
                 XmlMailTemplate template;
-                if (templates.containsKey(mailId)) {
-                    template = templates.get(mailId);
+                if (templates.containsKey(mail.getName())) {
+                    template = templates.get(mail.getName());
                 } else {
-                    template = new XmlMailTemplate(mailId);
-                    templates.put(mailId, template);
+                    template = new XmlMailTemplate(mail.getName());
+                    templates.put(mail.getName(), template);
                 }
 
-                template.parseXML(mail);
+                template.addDefinitions(mail);
             }
 
-        } catch (ParserConfigurationException e) {
-            throw new IllegalStateException(e);
-        } catch (SAXException e) {
-            throw new IllegalArgumentException("Malformed XML detected in " + file, e);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Cannot read XML in " + file, e);
+        } catch (JAXBException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 
@@ -136,7 +138,7 @@ class FileXmlTemplateService implements MailService, Initializable {
         if (!templates.containsKey(name)) {
             throw new IllegalArgumentException("Mail template '" + name + "' not found.");
         }
-        LocalizedXmlMailTemplate template = templates.get(name).createLocalized(locale);
+        LocalizedMailTemplate template = templates.get(name).createLocalized(locale);
 
         MimeMessage message = new MimeMessage(session);
         message.setSubject(template.getSubject());
@@ -144,6 +146,9 @@ class FileXmlTemplateService implements MailService, Initializable {
 
         // TODO fixme, create multipart email with attachments instead of simple text
         message.setText(template.getBody());
+
+        // TODO use template engine
+        // TODO use attachments
 
         return message;
     }

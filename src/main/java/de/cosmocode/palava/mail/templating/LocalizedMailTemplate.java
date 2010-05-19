@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package de.cosmocode.palava.mail.xml;
+package de.cosmocode.palava.mail.templating;
 
-import de.cosmocode.palava.mail.attachments.MailAttachment;
-import de.cosmocode.palava.mail.templating.TemplateEngine;
-
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author Tobias Sarnowski
  */
-public interface LocalizedXmlMailTemplate {
+public interface LocalizedMailTemplate {
 
     /**
      * @return the mail subject
@@ -43,9 +39,14 @@ public interface LocalizedXmlMailTemplate {
     Map<String,String> getSnippets();
 
     /**
+     * @return the list of embedded attachments
+     */
+    Map<String, MailAttachmentTemplate> getEmbedded();
+
+    /**
      * @return the list of attachments
      */
-    Map<String,XmlMailAttachment> getAttachments();
+    Map<String, MailAttachmentTemplate> getAttachments();
 
     /**
      * @return the class, used as template engine

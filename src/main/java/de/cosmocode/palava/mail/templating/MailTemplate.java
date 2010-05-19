@@ -16,13 +16,12 @@
 
 package de.cosmocode.palava.mail.templating;
 
-import java.util.Map;
+import java.util.Locale;
 
 /**
  * @author Tobias Sarnowski
  */
-public interface TemplateEngine {
-
-    public LocalizedMailTemplate generate(LocalizedMailTemplate template, Map<? extends CharSequence,? extends Object> variables);
-
+public interface MailTemplate {
+    String getName();
+    LocalizedMailTemplate createLocalized(Locale locale);
 }

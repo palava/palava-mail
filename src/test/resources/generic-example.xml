@@ -18,43 +18,45 @@
 -->
 
 <pm:mails xmlns:pm="http://palava.cosmocode.de/palava-mail/2.0">
-  <!--1 or more repetitions:-->
-  <pm:mail name="MyMail">
-    <!--Optional:-->
-    <pm:default templateEngine="de.cosmocode.palava.mail.templating.velocity.VelocityTemplateEngine">
-      <!--Optional:-->
-      <pm:subject>string</pm:subject>
-      <!--Optional:-->
-      <pm:body>string</pm:body>
-      <!--Zero or more repetitions:-->
-      <pm:embedded name="MyDocument.doc" source="de.cosmocode.palava.mail.attachments.LocalFileAttachment">
+
+    <!--Zero or more repetitions:-->
+    <pm:mail name="MyMail">
+        <!--Optional:-->
+        <pm:default templateEngine="de.cosmocode.palava.mail.templating.velocity.VelocityTemplateEngine">
+            <!--Optional:-->
+            <pm:subject>string</pm:subject>
+            <!--Optional:-->
+            <pm:body>string</pm:body>
+            <!--Zero or more repetitions:-->
+            <pm:embedded name="MyDocument.doc" source="de.cosmocode.palava.mail.attachments.LocalFileAttachment">
+                <!--Zero or more repetitions:-->
+                <pm:config name="configuration_key" value="configuration_value"/>
+            </pm:embedded>
+            <!--Zero or more repetitions:-->
+            <pm:attachment name="MyDocument.doc" source="de.cosmocode.palava.mail.attachments.LocalFileAttachment">
+                <!--Zero or more repetitions:-->
+                <pm:config name="configuration_key" value="configuration_value"/>
+            </pm:attachment>
+            <!--Zero or more repetitions:-->
+            <pm:snippet name="MySnippet">string</pm:snippet>
+        </pm:default>
+
         <!--Zero or more repetitions:-->
-        <pm:config name="configuration_key" value="configuration_value"/>
-      </pm:embedded>
-      <!--Zero or more repetitions:-->
-      <pm:attachment name="MyDocument.doc" source="de.cosmocode.palava.mail.attachments.LocalFileAttachment">
-        <!--Zero or more repetitions:-->
-        <pm:config name="configuration_key" value="configuration_value"/>
-      </pm:attachment>
-      <!--Zero or more repetitions:-->
-      <pm:snippet name="MySnippet">string</pm:snippet>
-    </pm:default>
-    <!--1 or more repetitions:-->
-    <pm:localized templateEngine="de.cosmocode.palava.mail.templating.velocity.VelocityTemplateEngine" locale="en_US">
-      <!--Optional:-->
-      <pm:subject>string</pm:subject>
-      <!--Optional:-->
-      <pm:body>string</pm:body>
-      <!--Zero or more repetitions:-->
-      <pm:embedded name="MyDocument.doc" source="de.cosmocode.palava.mail.attachments.LocalFileAttachment">
-        <!--Zero or more repetitions:-->
-        <pm:config name="configuration_key" value="configuration_value"/>
-      </pm:embedded>
-      <!--Zero or more repetitions:-->
-      <pm:attachment name="MyDocument.doc" source="de.cosmocode.palava.mail.attachments.LocalFileAttachment">
-        <!--Zero or more repetitions:-->
-        <pm:config name="configuration_key" value="configuration_value"/>
-      </pm:attachment>
-    </pm:localized>
-  </pm:mail>
+        <pm:localized templateEngine="de.cosmocode.palava.mail.templating.velocity.VelocityTemplateEngine" locale="en_US">
+            <!--Optional:-->
+            <pm:subject>string</pm:subject>
+            <!--Optional:-->
+            <pm:body>string</pm:body>
+            <!--Zero or more repetitions:-->
+            <pm:embedded name="MyDocument.doc" source="de.cosmocode.palava.mail.attachments.LocalFileAttachment">
+                <!--Zero or more repetitions:-->
+                <pm:config name="configuration_key" value="configuration_value"/>
+            </pm:embedded>
+            <!--Zero or more repetitions:-->
+            <pm:attachment name="MyDocument.doc" source="de.cosmocode.palava.mail.attachments.LocalFileAttachment">
+                <!--Zero or more repetitions:-->
+                <pm:config name="configuration_key" value="configuration_value"/>
+            </pm:attachment>
+        </pm:localized>
+    </pm:mail>
 </pm:mails>
