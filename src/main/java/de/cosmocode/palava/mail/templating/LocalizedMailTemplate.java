@@ -17,11 +17,17 @@
 package de.cosmocode.palava.mail.templating;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Tobias Sarnowski
  */
 public interface LocalizedMailTemplate {
+
+    /**
+     * @return the unique name of the template
+     */
+    String getName();
 
     /**
      * @return the mail subject
@@ -41,12 +47,12 @@ public interface LocalizedMailTemplate {
     /**
      * @return the list of embedded attachments
      */
-    Map<String, MailAttachmentTemplate> getEmbedded();
+    Set<MailAttachmentTemplate> getEmbedded();
 
     /**
      * @return the list of attachments
      */
-    Map<String, MailAttachmentTemplate> getAttachments();
+    Set<MailAttachmentTemplate> getAttachments();
 
     /**
      * @return the class, used as template engine

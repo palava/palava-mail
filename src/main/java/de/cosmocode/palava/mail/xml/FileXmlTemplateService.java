@@ -24,6 +24,8 @@ import de.cosmocode.palava.core.lifecycle.LifecycleException;
 import de.cosmocode.palava.mail.MailService;
 import de.cosmocode.palava.mail.templating.LocalizedMailTemplate;
 import de.cosmocode.palava.mail.templating.MailTemplate;
+import de.cosmocode.palava.mail.templating.TemplateEngine;
+import de.cosmocode.palava.mail.templating.TemplateException;
 import de.cosmocode.palava.mail.xml.gen.MailType;
 import de.cosmocode.palava.mail.xml.gen.MailsType;
 import de.cosmocode.palava.mail.xml.gen.ObjectFactory;
@@ -134,28 +136,46 @@ class FileXmlTemplateService implements MailService, Initializable {
     }
 
     @Override
-    public Message prepare(String name, Locale locale, Session session, Map<? extends CharSequence, ? extends Object> templateVariables) throws MessagingException {
+    public Message prepare(String name, Locale locale, Session session, Map<String, ? extends Object> templateVariables) throws MessagingException {
         if (!templates.containsKey(name)) {
             throw new IllegalArgumentException("Mail template '" + name + "' not found.");
         }
         LocalizedMailTemplate template = templates.get(name).createLocalized(locale);
 
+        if (template.getTemplateEngine() != null) {
+            TemplateEngine tplEngine;
+            try {
+                tplEngine = template.getTemplateEngine().newInstance();
+            } catch (InstantiationException e) {
+                throw new MessagingException("Cannot load TemplateEngine " + template.getTemplateEngine(), e);
+            } catch (IllegalAccessException e) {
+                throw new MessagingException("Cannot access TemplateEngine " + template.getTemplateEngine(), e);
+            }
+            try {
+                template = tplEngine.generate(template, templateVariables);
+            } catch (TemplateException e) {
+                throw new MessagingException("Cannot parse Template", e);
+            }
+        }
+
         MimeMessage message = new MimeMessage(session);
         message.setSubject(template.getSubject());
         message.setSentDate(new Date());
-
-        // TODO fixme, create multipart email with attachments instead of simple text
-        message.setText(template.getBody());
-
-        // TODO use template engine
-        // TODO use attachments
+        
+        // TODO encoding and mimetype
+        if (template.getAttachments().size() == 0 && template.getEmbedded().size() == 0) {
+            message.setText(template.getBody());
+        } else  {
+            // TODO fixme, create multipart email with attachments instead of simple text
+            throw new UnsupportedOperationException("cannot send attachments or use embedded binaries");
+        }
 
         return message;
     }
 
     @Override
     public Message prepare(String name, Locale locale, Session session) throws MessagingException {
-        Map<? extends CharSequence, ? extends Object> newMap = Maps.newHashMap();
+        Map<String, ? extends Object> newMap = Maps.newHashMap();
         return prepare(name, locale, session, newMap);
     }
 }

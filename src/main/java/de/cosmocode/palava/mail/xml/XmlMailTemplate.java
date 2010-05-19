@@ -16,7 +16,9 @@
 
 package de.cosmocode.palava.mail.xml;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import de.cosmocode.palava.mail.templating.LocalizedMailTemplate;
 import de.cosmocode.palava.mail.templating.MailAttachmentTemplate;
 import de.cosmocode.palava.mail.templating.MailTemplate;
@@ -25,8 +27,10 @@ import de.cosmocode.palava.mail.xml.gen.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Tobias Sarnowski
@@ -40,14 +44,14 @@ public class XmlMailTemplate implements MailTemplate {
     private String defaultSubject;
     private String defaultBody;
     private final Map<String,String> snippets = Maps.newHashMap();
-    private final Map<String, MailAttachmentTemplate> defaultEmbedded = Maps.newHashMap();
-    private final Map<String, MailAttachmentTemplate> defaultAttachments = Maps.newHashMap();
+    private final Set<MailAttachmentTemplate> defaultEmbedded = Sets.newHashSet();
+    private final Set<MailAttachmentTemplate> defaultAttachments = Sets.newHashSet();
 
     private final Map<Locale,Class<? extends TemplateEngine>> templateEngine = Maps.newHashMap();
     private final Map<Locale,String> subject = Maps.newHashMap();
     private final Map<Locale,String> body = Maps.newHashMap();
-    private final Map<Locale,Map<String, MailAttachmentTemplate>> embedded = Maps.newHashMap();
-    private final Map<Locale,Map<String, MailAttachmentTemplate>> attachments = Maps.newHashMap();
+    private final Map<Locale,Set<MailAttachmentTemplate>> embedded = Maps.newHashMap();
+    private final Map<Locale,Set<MailAttachmentTemplate>> attachments = Maps.newHashMap();
 
 
     public XmlMailTemplate(String mailName) {
@@ -82,10 +86,10 @@ public class XmlMailTemplate implements MailTemplate {
                 snippets.put(snippet.getName(), snippet.getValue());
             }
             for (AttachmentType attachment: defaultTemplate.getEmbedded()) {
-                defaultEmbedded.put(attachment.getName(), new XmlMailAttachment(attachment));
+                defaultEmbedded.add(new XmlMailAttachment(attachment));
             }
             for (AttachmentType attachment: defaultTemplate.getAttachment()) {
-                defaultAttachments.put(attachment.getName(), new XmlMailAttachment(attachment));
+                defaultAttachments.add(new XmlMailAttachment(attachment));
             }
         }
 
@@ -108,22 +112,22 @@ public class XmlMailTemplate implements MailTemplate {
                 body.put(locale, localized.getBody());
             }
 
-            Map<String, MailAttachmentTemplate> embedded = this.embedded.get(locale);
+            Set<MailAttachmentTemplate> embedded = this.embedded.get(locale);
             if (embedded == null) {
-                embedded = Maps.newHashMap();
+                embedded = Sets.newHashSet();
                 this.embedded.put(locale, embedded);
             }
             for (AttachmentType attachment: localized.getEmbedded()) {
-                embedded.put(attachment.getName(), new XmlMailAttachment(attachment));
+                embedded.add(new XmlMailAttachment(attachment));
             }
 
-            Map<String, MailAttachmentTemplate> attachments = this.attachments.get(locale);
+            Set<MailAttachmentTemplate> attachments = this.attachments.get(locale);
             if (attachments == null) {
-                attachments = Maps.newHashMap();
+                attachments = Sets.newHashSet();
                 this.attachments.put(locale, attachments);
             }
             for (AttachmentType attachment: localized.getEmbedded()) {
-                attachments.put(attachment.getName(), new XmlMailAttachment(attachment));
+                attachments.add(new XmlMailAttachment(attachment));
             }
         }
     }
@@ -131,6 +135,11 @@ public class XmlMailTemplate implements MailTemplate {
     @Override
     public LocalizedMailTemplate createLocalized(final Locale locale) {
         return new LocalizedMailTemplate() {
+            @Override
+            public String getName() {
+                return XmlMailTemplate.this.getName();
+            }
+
             @Override
             public String getSubject() {
                 if (subject.containsKey(locale)) {
@@ -159,19 +168,19 @@ public class XmlMailTemplate implements MailTemplate {
             }
 
             @Override
-            public Map<String, MailAttachmentTemplate> getEmbedded() {
-                Map<String, MailAttachmentTemplate> embedded = Maps.newHashMap(defaultEmbedded);
+            public Set<MailAttachmentTemplate> getEmbedded() {
+                Set<MailAttachmentTemplate> embedded = Sets.newHashSet(defaultEmbedded);
                 if (XmlMailTemplate.this.embedded.containsKey(locale)) {
-                    embedded.putAll(XmlMailTemplate.this.embedded.get(locale));
+                    embedded.addAll(XmlMailTemplate.this.embedded.get(locale));
                 }
                 return embedded;
             }
 
             @Override
-            public Map<String, MailAttachmentTemplate> getAttachments() {
-                Map<String, MailAttachmentTemplate> attachments = Maps.newHashMap(defaultAttachments);
+            public Set<MailAttachmentTemplate> getAttachments() {
+                Set<MailAttachmentTemplate> attachments = Sets.newHashSet(defaultAttachments);
                 if (XmlMailTemplate.this.attachments.containsKey(locale)) {
-                    attachments.putAll(XmlMailTemplate.this.attachments.get(locale));
+                    attachments.addAll(XmlMailTemplate.this.attachments.get(locale));
                 }
                 return attachments;
             }

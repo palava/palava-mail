@@ -16,17 +16,24 @@
 
 package de.cosmocode.palava.mail.templating;
 
-import de.cosmocode.palava.mail.attachments.MailAttachmentSource;
-
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Tobias Sarnowski
  */
-public interface MailAttachmentTemplate {
-    String getName();
+public class TemplateException extends Exception {
+    private static final Logger LOG = LoggerFactory.getLogger(TemplateException.class);
 
-    Class<? extends MailAttachmentSource> getSource();
+    public TemplateException(String message) {
+        super(message);
+    }
 
-    Map<String, String> getConfiguration();
+    public TemplateException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public TemplateException(Throwable cause) {
+        super(cause);
+    }
 }

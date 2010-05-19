@@ -36,7 +36,7 @@ public interface MailService {
      * @return a mail with already filled in subject and body
      * @throws MessagingException
      */
-    Message prepare(String name, Locale locale, Session session, Map<? extends CharSequence,? extends Object> templateVariables) throws MessagingException;
+    Message prepare(String name, Locale locale, Session session, Map<String,? extends Object> templateVariables) throws MessagingException;
 
     /**
      * Prepares a Mail with subject and body, it's nessecary to fill in TO and FROM afterwards.

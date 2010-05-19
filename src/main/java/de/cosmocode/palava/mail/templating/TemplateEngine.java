@@ -23,6 +23,6 @@ import java.util.Map;
  */
 public interface TemplateEngine {
 
-    public LocalizedMailTemplate generate(LocalizedMailTemplate template, Map<? extends CharSequence,? extends Object> variables);
+    public LocalizedMailTemplate generate(LocalizedMailTemplate template, Map<String,? extends Object> variables) throws TemplateException;
 
 }
