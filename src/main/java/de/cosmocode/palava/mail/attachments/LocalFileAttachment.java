@@ -16,14 +16,15 @@
 
 package de.cosmocode.palava.mail.attachments;
 
-import com.google.common.base.Preconditions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * @author Tobias Sarnowski

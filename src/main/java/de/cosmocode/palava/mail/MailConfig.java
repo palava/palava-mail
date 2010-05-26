@@ -17,10 +17,16 @@
 package de.cosmocode.palava.mail;
 
 /**
+ * Static constant holder class for mail config key names.
+ * 
  * @author Tobias Sarnowski
  */
-public class MailConfig {
+public final class MailConfig {
 
     public static final String PREFIX = "mail.";
 
+    private MailConfig() {
+        
+    }
+    
 }

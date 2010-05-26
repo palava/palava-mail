@@ -17,9 +17,11 @@
 package de.cosmocode.palava.mail;
 
 /**
+ * Static constant holder class for imap config key names.
+ * 
  * @author Tobias Sarnowski
  */
-public class ImapConfig {
+public final class ImapConfig {
 
     public static final String PREFIX = MailConfig.PREFIX + "imap.";
 
@@ -29,5 +31,9 @@ public class ImapConfig {
     public static final String PORT = PREFIX + "port";
     public static final String USER = PREFIX + "user";
     public static final String PASSWORD = PREFIX + "password";
+    
+    private ImapConfig() {
+        
+    }
 
 }

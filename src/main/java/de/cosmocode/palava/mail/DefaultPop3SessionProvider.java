@@ -29,19 +29,23 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
 
+import de.cosmocode.palava.core.lifecycle.Initializable;
+import de.cosmocode.palava.core.lifecycle.LifecycleException;
+
 /**
  * Smtp based {@link Session} {@link Provider} implementation.
- * 
- * @deprecated use {@link DefaultSmtpSessionProvider} instead
- * @author Tobias Sarnowski
+ *
+ * @since 2.0
+ * @author Willi Schoenborn
  */
-@Deprecated
-final class DefaultSmtpProvider implements Provider<Session> {
-    
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultSmtpProvider.class);
+final class DefaultPop3SessionProvider implements Provider<Session>, Initializable {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultPop3SessionProvider.class);
+
+    private final Properties configuration = new Properties();
+    
     private String host = "localhost";
-    private int port = 25;
+    private int port = 110;
     private String user;
     private String password;
 
@@ -50,42 +54,37 @@ final class DefaultSmtpProvider implements Provider<Session> {
     private boolean debug;
 
     @Inject(optional = true)
-    void setDebug(@Named(SmtpConfig.DEBUG) boolean debug) {
+    void setDebug(@Named(Pop3Config.DEBUG) boolean debug) {
         this.debug = debug;
     }
 
     @Inject(optional = true)
-    void setHost(@Named(SmtpConfig.HOST) String host) {
+    void setHost(@Named(Pop3Config.HOST) String host) {
         this.host = host;
     }
 
     @Inject(optional = true)
-    void setPort(@Named(SmtpConfig.PORT) int port) {
+    void setPort(@Named(Pop3Config.PORT) int port) {
         this.port = port;
     }
 
     @Inject(optional = true)
-    void setUser(@Named(SmtpConfig.USER) String user) {
+    void setUser(@Named(Pop3Config.USER) String user) {
         this.user = user;
     }
 
     @Inject(optional = true)
-    void setPassword(@Named(SmtpConfig.PASSWORD) String password) {
+    void setPassword(@Named(Pop3Config.PASSWORD) String password) {
         this.password = password;
     }
 
     @Inject(optional = true)
-    void setAuthenticator(@Smtp Authenticator authenticator) {
+    void setAuthenticator(@Pop3 Authenticator authenticator) {
         this.authenticator = authenticator;
     }
-
+    
     @Override
-    public Session get() {
-        final Properties configuration = new Properties();
-        configuration.put("mail.smtp.host", host);
-        configuration.put("mail.smtp.port", port);
-        configuration.put("mail.debug", Boolean.toString(debug));
-
+    public void initialize() throws LifecycleException {
         if (user != null && password != null) {
             if (authenticator == null) {
                 LOG.trace("User and password configured; generating Authenticator");
@@ -95,22 +94,32 @@ final class DefaultSmtpProvider implements Provider<Session> {
             
             authenticator = new Authenticator() {
                 
+                private final PasswordAuthentication authentication = new PasswordAuthentication(user, password);
+                
                 @Override
                 public PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(user, password);
+                    return authentication;
                 }
                 
             };
         }
-
+        
+        configuration.put("mail.pop3.host", host);
+        configuration.put("mail.pop3.port", port);
+        configuration.put("mail.debug", Boolean.toString(debug));
+        
         if (authenticator == null) {
             LOG.trace("Using no authenticator");
-            return Session.getDefaultInstance(configuration);
         } else {
             LOG.trace("Using authenticator {}", authenticator);
-            configuration.put("mail.smtp.auth", "true");
-            return Session.getDefaultInstance(configuration, authenticator);
+            configuration.put("mail.pop3.auth", "true");
         }
+    }
+
+    @Override
+    public Session get() {
+        // FIXME default is a singleton
+        return Session.getDefaultInstance(configuration, authenticator);
     }
     
 }

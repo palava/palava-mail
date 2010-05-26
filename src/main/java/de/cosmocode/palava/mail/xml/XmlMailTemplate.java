@@ -16,21 +16,25 @@
 
 package de.cosmocode.palava.mail.xml;
 
-import com.google.common.collect.Lists;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import de.cosmocode.palava.mail.templating.LocalizedMailTemplate;
 import de.cosmocode.palava.mail.templating.MailAttachmentTemplate;
 import de.cosmocode.palava.mail.templating.MailTemplate;
 import de.cosmocode.palava.mail.templating.TemplateEngine;
-import de.cosmocode.palava.mail.xml.gen.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import de.cosmocode.palava.mail.xml.gen.AttachmentType;
+import de.cosmocode.palava.mail.xml.gen.DefaultType;
+import de.cosmocode.palava.mail.xml.gen.LocalizedType;
+import de.cosmocode.palava.mail.xml.gen.MailType;
+import de.cosmocode.palava.mail.xml.gen.SnippetType;
 
 /**
  * @author Tobias Sarnowski

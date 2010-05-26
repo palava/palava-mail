@@ -17,9 +17,11 @@
 package de.cosmocode.palava.mail;
 
 /**
+ * Static constant holder class for smtp config key names.
+ * 
  * @author Tobias Sarnowski
  */
-public class SmtpConfig {
+public final class SmtpConfig {
 
     public static final String PREFIX = MailConfig.PREFIX + "smtp.";
 
@@ -30,4 +32,8 @@ public class SmtpConfig {
     public static final String USER = PREFIX + "user";
     public static final String PASSWORD = PREFIX + "password";
 
+    private SmtpConfig() {
+        
+    }
+    
 }

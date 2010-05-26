@@ -16,9 +16,9 @@
 
 package de.cosmocode.palava.mail.templating;
 
-import de.cosmocode.palava.mail.attachments.MailAttachmentSource;
-
 import java.util.Map;
+
+import de.cosmocode.palava.mail.attachments.MailAttachmentSource;
 
 /**
  * @author Tobias Sarnowski

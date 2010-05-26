@@ -16,11 +16,13 @@
 
 package de.cosmocode.palava.mail.xml;
 
-import com.google.inject.Binder;
-import com.google.inject.Module;
-import de.cosmocode.palava.mail.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.inject.Binder;
+import com.google.inject.Module;
+
+import de.cosmocode.palava.mail.MailService;
 
 /**
  * @author Tobias Sarnowski

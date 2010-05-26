@@ -17,9 +17,11 @@
 package de.cosmocode.palava.mail;
 
 /**
+ * Static constant holder class for pop3 config key names.
+ * 
  * @author Tobias Sarnowski
  */
-public class Pop3Config {
+public final class Pop3Config {
 
     public static final String PREFIX = MailConfig.PREFIX + "pop3.";
 
@@ -30,4 +32,8 @@ public class Pop3Config {
     public static final String USER = PREFIX + "user";
     public static final String PASSWORD = PREFIX + "password";
 
+    private Pop3Config() {
+        
+    }
+    
 }

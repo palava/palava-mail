@@ -16,35 +16,41 @@
 
 package de.cosmocode.palava.mail;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+
 /**
+ * A service which can be used to prepare {@link Message}s from predefined templates.
+ * 
  * @author Tobias Sarnowski
  */
 public interface MailService {
 
     /**
      * Prepares a Mail with subject and body, it's nessecary to fill in TO and FROM afterwards.
+     * 
      * @param name the mail templates unique name
      * @param locale the language to use
      * @param session the smtp configured mail session
-     * @param templateVariables variables used by the template engine
+     * @param content variables used by the template engine
      * @return a mail with already filled in subject and body
-     * @throws MessagingException
+     * @throws MessagingException if an error occured during preparation
      */
-    Message prepare(String name, Locale locale, Session session, Map<String,? extends Object> templateVariables) throws MessagingException;
+    Message prepare(String name, Locale locale, Session session, Map<String, ? extends Object> content) 
+        throws MessagingException;
 
     /**
      * Prepares a Mail with subject and body, it's nessecary to fill in TO and FROM afterwards.
+     * 
      * @param name the mail templates unique name
      * @param locale the language to use
      * @param session the smtp configured mail session
      * @return a mail with already filled in subject and body
-     * @throws MessagingException
+     * @throws MessagingException if an error occured during preparation
      */
     Message prepare(String name, Locale locale, Session session) throws MessagingException;
 

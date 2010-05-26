@@ -16,14 +16,15 @@
 
 package de.cosmocode.palava.mail.xml;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.cosmocode.palava.mail.attachments.MailAttachmentSource;
 import de.cosmocode.palava.mail.templating.MailAttachmentTemplate;
 import de.cosmocode.palava.mail.xml.gen.AttachmentType;
 import de.cosmocode.palava.mail.xml.gen.ConfigType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 /**
  * @author Tobias Sarnowski

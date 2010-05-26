@@ -16,19 +16,25 @@
 
 package de.cosmocode.palava.mail;
 
-import com.google.inject.BindingAnnotation;
+import javax.mail.Session;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.google.inject.Binder;
+import com.google.inject.Module;
+import com.google.inject.Singleton;
 
 /**
- * TODO why not use @Smtp Authenticator instead?
- * 
- * @author Tobias Sarnowski
+ * Binds {@link Session} to {@link DefaultPop3SessionProvider}.
+ *
+ * @since 2.0
+ * @author Willi Schoenborn
  */
-@BindingAnnotation
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SmtpAuthenticator {
+public final class DefaultPop3SessionModule implements Module {
+
+    @Override
+    public void configure(Binder binder) {
+        binder.bind(DefaultPop3SessionProvider.class).in(Singleton.class);
+        // TODO session is unscoped?
+        binder.bind(Session.class).annotatedWith(Pop3.class).toProvider(DefaultPop3SessionProvider.class);
+    }
+
 }

@@ -16,22 +16,11 @@
 
 package de.cosmocode.palava.mail.xml;
 
-import com.google.common.collect.Maps;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import de.cosmocode.palava.core.lifecycle.Initializable;
-import de.cosmocode.palava.core.lifecycle.LifecycleException;
-import de.cosmocode.palava.mail.MailService;
-import de.cosmocode.palava.mail.templating.LocalizedMailTemplate;
-import de.cosmocode.palava.mail.templating.MailTemplate;
-import de.cosmocode.palava.mail.templating.TemplateEngine;
-import de.cosmocode.palava.mail.templating.TemplateException;
-import de.cosmocode.palava.mail.xml.gen.MailType;
-import de.cosmocode.palava.mail.xml.gen.MailsType;
-import de.cosmocode.palava.mail.xml.gen.ObjectFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.net.URL;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -44,11 +33,24 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.File;
-import java.net.URL;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
+
+import com.google.common.collect.Maps;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
+import de.cosmocode.palava.core.lifecycle.Initializable;
+import de.cosmocode.palava.core.lifecycle.LifecycleException;
+import de.cosmocode.palava.mail.MailService;
+import de.cosmocode.palava.mail.templating.LocalizedMailTemplate;
+import de.cosmocode.palava.mail.templating.TemplateEngine;
+import de.cosmocode.palava.mail.templating.TemplateException;
+import de.cosmocode.palava.mail.xml.gen.MailType;
+import de.cosmocode.palava.mail.xml.gen.MailsType;
+import de.cosmocode.palava.mail.xml.gen.ObjectFactory;
 
 /**
  * @author Tobias Sarnowski

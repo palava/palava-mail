@@ -16,23 +16,25 @@
 
 package de.cosmocode.palava.mail;
 
+import javax.mail.Session;
+
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.mail.Session;
 
 /**
+ * Binds {@link Session} to {@link DefaultSmtpProvider}.
+ * 
+ * @deprecated use {@link DefaultSmtpSessionModule} instead
  * @author Tobias Sarnowski
  */
+@Deprecated
 public class DefaultSmtpModule implements Module {
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultSmtpModule.class);
 
     @Override
     public void configure(Binder binder) {
         binder.bind(DefaultSmtpProvider.class).in(Singleton.class);
         binder.bind(Session.class).annotatedWith(Smtp.class).toProvider(DefaultSmtpProvider.class);
     }
+    
 }

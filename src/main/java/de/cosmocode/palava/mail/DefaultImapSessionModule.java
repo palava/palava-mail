@@ -16,15 +16,25 @@
 
 package de.cosmocode.palava.mail;
 
-import com.google.inject.BindingAnnotation;
+import javax.mail.Session;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import com.google.inject.Binder;
+import com.google.inject.Module;
+import com.google.inject.Singleton;
 
 /**
- * @author Tobias Sarnowski
+ * Binds {@link Session} to {@link DefaultImapSessionProvider}.
+ *
+ * @since 2.0
+ * @author Willi Schoenborn
  */
-@BindingAnnotation
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ImapAuthenticator {
+public final class DefaultImapSessionModule implements Module {
+
+    @Override
+    public void configure(Binder binder) {
+        binder.bind(DefaultImapSessionProvider.class).in(Singleton.class);
+        // TODO session is unscoped?
+        binder.bind(Session.class).annotatedWith(Imap.class).toProvider(DefaultImapSessionProvider.class);
+    }
+
 }
