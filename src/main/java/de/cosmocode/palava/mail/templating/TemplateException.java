@@ -16,14 +16,14 @@
 
 package de.cosmocode.palava.mail.templating;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
+ * Exception class used in {@link TemplateEngine}s.
+ * 
  * @author Tobias Sarnowski
  */
 public class TemplateException extends Exception {
-    private static final Logger LOG = LoggerFactory.getLogger(TemplateException.class);
+
+    private static final long serialVersionUID = 7390448264081673470L;
 
     public TemplateException(String message) {
         super(message);
@@ -36,4 +36,5 @@ public class TemplateException extends Exception {
     public TemplateException(Throwable cause) {
         super(cause);
     }
+    
 }

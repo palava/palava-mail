@@ -22,6 +22,9 @@ import java.util.Locale;
  * @author Tobias Sarnowski
  */
 public interface MailTemplate {
+    
     String getName();
+    
     LocalizedMailTemplate createLocalized(Locale locale);
+    
 }

@@ -24,9 +24,11 @@ import de.cosmocode.palava.mail.attachments.MailAttachmentSource;
  * @author Tobias Sarnowski
  */
 public interface MailAttachmentTemplate {
+    
     String getName();
 
     Class<? extends MailAttachmentSource> getSource();
 
     Map<String, String> getConfiguration();
+    
 }

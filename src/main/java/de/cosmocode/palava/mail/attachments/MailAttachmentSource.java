@@ -23,6 +23,6 @@ import java.util.Map;
  */
 public interface MailAttachmentSource {
 
-    public MailAttachment generate(String name, Map<String,String> configuration);
+    MailAttachment generate(String name, Map<String, String> configuration);
 
 }

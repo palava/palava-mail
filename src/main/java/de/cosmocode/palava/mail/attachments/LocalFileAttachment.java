@@ -21,44 +21,48 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.io.FileUtils;
 
 import com.google.common.base.Preconditions;
 
 /**
+ * {@link File} based {@link MailAttachmentSource} implementation.
+ * 
  * @author Tobias Sarnowski
+ * @author Willi Schoenborn
  */
 public class LocalFileAttachment implements MailAttachmentSource {
-    private static final Logger LOG = LoggerFactory.getLogger(LocalFileAttachment.class);
 
     @Override
     public MailAttachment generate(final String name, Map<String, String> configuration) {
-        String filename = Preconditions.checkNotNull(configuration.get("file"), "'file' not configured for attachment");
-
-        File file = new File(filename);
-        Preconditions.checkState(file.canRead(), "cannot read configured souce file '" + filename + "'");
-
-        final InputStream in;
+        final String filename = configuration.get("file");
+        Preconditions.checkNotNull(filename, "'file' not configured for attachment");
+        final InputStream stream;
+        
         try {
-            in = file.toURI().toURL().openStream();
+            stream = FileUtils.openInputStream(new File(filename));
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
 
         return new MailAttachment() {
+            
             @Override
             public String getName() {
                 return name;
             }
+            
             @Override
             public InputStream getContent() {
-                return in;
+                return stream;
             }
+            
             @Override
             public String toString() {
-                return "LocalFileAttachment{" + name + "}";
+                return "LocalFileAttachment [" + name + "]";
             }
+            
         };
     }
+    
 }

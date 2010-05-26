@@ -18,6 +18,7 @@ package de.cosmocode.palava.mail.xml;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -177,7 +178,6 @@ class FileXmlTemplateService implements MailService, Initializable {
 
     @Override
     public Message prepare(String name, Locale locale, Session session) throws MessagingException {
-        Map<String, ? extends Object> newMap = Maps.newHashMap();
-        return prepare(name, locale, session, newMap);
+        return prepare(name, locale, session, Collections.<String, Object>emptyMap());
     }
 }
