@@ -18,10 +18,7 @@ package de.cosmocode.palava.mail.xml;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -35,6 +32,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import de.cosmocode.palava.mail.templating.MailTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -179,5 +177,10 @@ class FileXmlTemplateService implements MailService, Initializable {
     @Override
     public Message prepare(String name, Locale locale, Session session) throws MessagingException {
         return prepare(name, locale, session, Collections.<String, Object>emptyMap());
+    }
+
+    @Override
+    public Collection<? extends MailTemplate> getAllTemplates() {
+        return Collections.unmodifiableCollection(templates.values());
     }
 }

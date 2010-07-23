@@ -16,6 +16,9 @@
 
 package de.cosmocode.palava.mail;
 
+import de.cosmocode.palava.mail.templating.MailTemplate;
+
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
@@ -53,5 +56,12 @@ public interface MailService {
      * @throws MessagingException if an error occured during preparation
      */
     Message prepare(String name, Locale locale, Session session) throws MessagingException;
+
+    /**
+     * Returns all templates that this mail service knows of.
+     *
+     * @return a collection of all known templates. can be empty.
+     */
+    Collection<? extends MailTemplate> getAllTemplates();
 
 }
