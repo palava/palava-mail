@@ -16,8 +16,6 @@
 
 package de.cosmocode.palava.mail;
 
-import de.cosmocode.palava.mail.templating.MailTemplate;
-
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
@@ -25,6 +23,8 @@ import java.util.Map;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
+
+import de.cosmocode.palava.mail.templating.MailTemplate;
 
 /**
  * A service which can be used to prepare {@link Message}s from predefined templates.
