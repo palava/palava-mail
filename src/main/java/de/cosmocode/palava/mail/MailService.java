@@ -60,6 +60,7 @@ public interface MailService {
     /**
      * Returns all templates that this mail service knows of.
      *
+     * @since 0.2
      * @return a collection of all known templates. can be empty.
      */
     Collection<? extends MailTemplate> getAllTemplates();
