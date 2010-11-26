@@ -22,7 +22,7 @@ import java.util.Map;
 import javax.mail.internet.MimeMessage;
 
 /**
- * A service 
+ * A service for sending email.
  *
  * @author Willi Schoenborn
  */
