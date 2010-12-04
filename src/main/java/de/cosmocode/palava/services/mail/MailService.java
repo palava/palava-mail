@@ -24,17 +24,54 @@ import javax.mail.internet.MimeMessage;
 /**
  * A service for sending email.
  *
+ * @deprecated replaced by {@link de.cosmocode.palava.mail.MailService}
  * @author Willi Schoenborn
  */
+@Deprecated
 public interface MailService {
 
-    @Deprecated
+    /**
+     * Sends a message.
+     * 
+     * @param template the template's name/path
+     * @param lang the language
+     * @param params the template parameters
+     * @param to the email addresses to send the message to
+     * @return the sent mime message for further processing, if needed
+     * @throws Exception anything goes wrong
+     */
     MimeMessage sendMessage(String template, String lang, Map<String, ?> params,  String... to) throws Exception;
     
+    /**
+     * Sends a message using a template descriptor.
+     * 
+     * @param descriptor the template descriptor
+     * @param lang the language
+     * @param params the template parameters
+     * @return the sent mime message for further processing, if needed
+     * @throws Exception anything goes wrong
+     */
     MimeMessage send(TemplateDescriptor descriptor, String lang, Map<String, ?> params) throws Exception;
-    
+
+    /**
+     * Sends a message using a template descriptor and a locale.
+     * 
+     * @param descriptor the template descriptor
+     * @param locale the locale
+     * @param params the template parameters
+     * @return the sent mime message for further processing, if needed
+     * @throws Exception anything goes wrong
+     */
     MimeMessage send(TemplateDescriptor descriptor, Locale locale, Map<String, ?> params) throws Exception;
-    
+
+    /**
+     * Sends a message using a template descriptor.
+     * 
+     * @param descriptor the template descriptor
+     * @param params the template parameters
+     * @return the sent mime message for further processing, if needed
+     * @throws Exception anything goes wrong
+     */
     MimeMessage send(TemplateDescriptor descriptor, Map<String, ?> params) throws Exception;
     
 }

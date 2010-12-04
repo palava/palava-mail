@@ -18,32 +18,36 @@ package de.cosmocode.palava.mail.xml;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.inject.internal.Maps;
+import com.google.inject.internal.Objects;
 
+import de.cosmocode.commons.reflect.Reflection;
 import de.cosmocode.palava.mail.attachments.MailAttachmentSource;
 import de.cosmocode.palava.mail.templating.MailAttachmentTemplate;
 import de.cosmocode.palava.mail.xml.gen.AttachmentType;
 import de.cosmocode.palava.mail.xml.gen.ConfigType;
 
 /**
+ * A xml based {@link MailAttachmentTemplate}.
+ * 
  * @author Tobias Sarnowski
  */
 public class XmlMailAttachment implements MailAttachmentTemplate {
-    private static final Logger LOG = LoggerFactory.getLogger(XmlMailAttachment.class);
 
-    private String name;
-    private Class<? extends MailAttachmentSource> source;
-    private Map<String,String> configuration;
+    private final String name;
+    private final Class<? extends MailAttachmentSource> source;
+    private final Map<String, String> configuration = Maps.newHashMap();
 
     public XmlMailAttachment(AttachmentType attachment) {
         name = attachment.getName();
+        
         try {
-            source = (Class<? extends MailAttachmentSource>) Class.forName(attachment.getSource());
+            source = Reflection.forName(attachment.getSource()).asSubclass(MailAttachmentSource.class);
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException(e);
         }
-        for (ConfigType config: attachment.getConfig()) {
+        
+        for (ConfigType config : attachment.getConfig()) {
             configuration.put(config.getName(), config.getValue());
         }
     }
@@ -64,19 +68,22 @@ public class XmlMailAttachment implements MailAttachmentTemplate {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final XmlMailAttachment that = (XmlMailAttachment) o;
-
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-
-        return true;
+    public boolean equals(Object that) {
+        if (this == that) {
+            return true;
+        } else if (that == null) {
+            return false;
+        } else if (getClass() == that.getClass()) {
+            final XmlMailAttachment other = XmlMailAttachment.class.cast(that);
+            return Objects.equal(name, other.name);
+        } else {
+            return false;
+        }
     }
 
     @Override
     public int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        return name == null ? 0 : name.hashCode();
     }
+    
 }

@@ -56,9 +56,12 @@ import de.cosmocode.palava.mail.xml.gen.MailsType;
 import de.cosmocode.palava.mail.xml.gen.ObjectFactory;
 
 /**
+ * A xml/file based {@link MailService}.
+ * 
  * @author Tobias Sarnowski
  */
 class FileXmlTemplateService implements MailService, Initializable {
+    
     private static final Logger LOG = LoggerFactory.getLogger(FileXmlTemplateService.class);
 
     private static final URL XSD = FileXmlTemplateService.class.getResource("/palava-mails.xsd");
@@ -69,23 +72,22 @@ class FileXmlTemplateService implements MailService, Initializable {
 
     private Map<String, XmlMailTemplate> templates = Maps.newHashMap();
 
-
-
     @Inject
     public FileXmlTemplateService(@Named(FileXmlTemplateServiceConfig.DIRECTORY) File directory) {
         this.directory = directory;
 
-        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema;
+        final Schema schema;
+        
         try {
+            final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             schema = schemaFactory.newSchema(XSD);
         } catch (SAXException e) {
             throw new IllegalArgumentException(e);
         }
 
         try {
-            JAXBContext jc = JAXBContext.newInstance(ObjectFactory.class.getPackage().getName());
-            unmarshaller = jc.createUnmarshaller();
+            final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class.getPackage().getName());
+            unmarshaller = context.createUnmarshaller();
             unmarshaller.setSchema(schema);
         } catch (JAXBException e) {
             LOG.error("An exception occured!", e);
@@ -101,8 +103,8 @@ class FileXmlTemplateService implements MailService, Initializable {
 
     private void loadFileRecursivly(File dir) {
         LOG.trace("Looking in directory {}...", dir);
-        for (String name: dir.list()) {
-            File file = new File(dir, name).getAbsoluteFile();
+        for (String name : dir.list()) {
+            final File file = new File(dir, name).getAbsoluteFile();
             if (file.isFile()) {
                 if (file.toString().endsWith(".xml")) {
                     loadFile(file);
@@ -120,10 +122,11 @@ class FileXmlTemplateService implements MailService, Initializable {
     private void loadFile(File file) {
         LOG.debug("Loading Mail template {}", file);
         try {
-            JAXBElement<MailsType> element = (JAXBElement<MailsType>)unmarshaller.unmarshal(file);
-            MailsType mails = element.getValue();
+            @SuppressWarnings("unchecked")
+            final JAXBElement<MailsType> element = (JAXBElement<MailsType>) unmarshaller.unmarshal(file);
+            final MailsType mails = element.getValue();
 
-            for (MailType mail: mails.getMail()) {
+            for (MailType mail : mails.getMail()) {
                 XmlMailTemplate template;
                 if (templates.containsKey(mail.getName())) {
                     template = templates.get(mail.getName());
@@ -141,7 +144,9 @@ class FileXmlTemplateService implements MailService, Initializable {
     }
 
     @Override
-    public Message prepare(String name, Locale locale, Session session, Map<String, ? extends Object> templateVariables) throws MessagingException {
+    public Message prepare(String name, Locale locale, Session session, 
+            Map<String, ? extends Object> templateVariables) throws MessagingException {
+        
         if (!templates.containsKey(name)) {
             throw new IllegalArgumentException("Mail template '" + name + "' not found.");
         }
@@ -163,15 +168,13 @@ class FileXmlTemplateService implements MailService, Initializable {
             }
         }
 
-        MimeMessage message = new MimeMessage(session);
+        final MimeMessage message = new MimeMessage(session);
         message.setSubject(template.getSubject());
         message.setSentDate(new Date());
         
-        // TODO encoding and mimetype
         if (template.getAttachments().size() == 0 && template.getEmbedded().size() == 0) {
             message.setText(template.getBody());
         } else  {
-            // TODO fixme, create multipart email with attachments instead of simple text
             throw new UnsupportedOperationException("cannot send attachments or use embedded binaries");
         }
 
@@ -187,4 +190,5 @@ class FileXmlTemplateService implements MailService, Initializable {
     public Collection<? extends MailTemplate> getAllTemplates() {
         return Collections.unmodifiableCollection(templates.values());
     }
+    
 }

@@ -19,10 +19,19 @@ package de.cosmocode.palava.mail.attachments;
 import java.util.Map;
 
 /**
+ * A source of {@link MailAttachment}.
+ * 
  * @author Tobias Sarnowski
  */
 public interface MailAttachmentSource {
 
+    /**
+     * Generates a {@link MailAttachment} using this source.
+     * 
+     * @param name the attachment's name
+     * @param configuration the configuration to use
+     * @return a new mail attachment
+     */
     MailAttachment generate(String name, Map<String, String> configuration);
 
 }

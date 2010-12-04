@@ -19,10 +19,20 @@ package de.cosmocode.palava.mail.templating;
 import java.util.Map;
 
 /**
+ * An engine which is able to generate/process templates.
+ * 
  * @author Tobias Sarnowski
  */
 public interface TemplateEngine {
 
+    /**
+     * Generates a localized mail template using the given template and variables.
+     * 
+     * @param template the template to build upon
+     * @param variables the template variables
+     * @return a localized template
+     * @throws TemplateException if anything goes wrong
+     */
     LocalizedMailTemplate generate(LocalizedMailTemplate template, Map<String, ? extends Object> variables) 
         throws TemplateException;
 

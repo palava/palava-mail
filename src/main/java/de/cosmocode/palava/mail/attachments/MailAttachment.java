@@ -19,18 +19,24 @@ package de.cosmocode.palava.mail.attachments;
 import java.io.InputStream;
 
 /**
+ * Basic mail attachment interface.
+ * 
  * @author Tobias Sarnowski
  */
 public interface MailAttachment {
 
     /**
+     * Returns the readable name of this attachment.
+     * 
      * @return the attachments readable name e.g. "MyDocument.doc"
      */
-    public String getName();
+    String getName();
 
     /**
+     * Provides the binary content of this attachment.
+     * 
      * @return the binary source
      */
-    public InputStream getContent();
+    InputStream getContent();
 
 }

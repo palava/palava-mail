@@ -16,6 +16,13 @@
 
 package de.cosmocode.palava.services.mail;
 
+/**
+ * Type of mail content.
+ * 
+ * @deprecated no need to use anymore
+ * @author Willi Schoenborn
+ */
+@Deprecated
 public enum ContentType {
 
     PLAIN, HTML;

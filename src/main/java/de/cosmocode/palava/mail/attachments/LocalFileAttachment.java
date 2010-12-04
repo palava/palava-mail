@@ -17,13 +17,14 @@
 package de.cosmocode.palava.mail.attachments;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-
 import com.google.common.base.Preconditions;
+import com.google.common.io.Files;
+import com.google.common.io.InputSupplier;
 
 /**
  * {@link File} based {@link MailAttachmentSource} implementation.
@@ -35,16 +36,12 @@ public class LocalFileAttachment implements MailAttachmentSource {
 
     @Override
     public MailAttachment generate(final String name, Map<String, String> configuration) {
-        final String filename = configuration.get("file");
-        Preconditions.checkNotNull(filename, "'file' not configured for attachment");
-        final InputStream stream;
+        final String fileName = configuration.get("file");
+        Preconditions.checkNotNull(fileName, "'file' not configured for attachment");
         
-        try {
-            stream = FileUtils.openInputStream(new File(filename));
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
-
+        final File file = new File(fileName);
+        final InputSupplier<FileInputStream> supplier = Files.newInputStreamSupplier(file);
+        
         return new MailAttachment() {
             
             @Override
@@ -54,7 +51,11 @@ public class LocalFileAttachment implements MailAttachmentSource {
             
             @Override
             public InputStream getContent() {
-                return stream;
+                try {
+                    return supplier.getInput();
+                } catch (IOException e) {
+                    throw new IllegalStateException(e);
+                }
             }
             
             @Override

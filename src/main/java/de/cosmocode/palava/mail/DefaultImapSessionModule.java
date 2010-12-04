@@ -33,7 +33,6 @@ public final class DefaultImapSessionModule implements Module {
     @Override
     public void configure(Binder binder) {
         binder.bind(DefaultImapSessionProvider.class).in(Singleton.class);
-        // TODO session is unscoped?
         binder.bind(Session.class).annotatedWith(Imap.class).toProvider(DefaultImapSessionProvider.class);
     }
 

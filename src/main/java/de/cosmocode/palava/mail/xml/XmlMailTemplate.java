@@ -20,12 +20,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import de.cosmocode.commons.reflect.Reflection;
 import de.cosmocode.palava.mail.templating.LocalizedMailTemplate;
 import de.cosmocode.palava.mail.templating.MailAttachmentTemplate;
 import de.cosmocode.palava.mail.templating.MailTemplate;
@@ -37,25 +35,26 @@ import de.cosmocode.palava.mail.xml.gen.MailType;
 import de.cosmocode.palava.mail.xml.gen.SnippetType;
 
 /**
+ * A xml based {@link MailTemplate}.
+ * 
  * @author Tobias Sarnowski
  */
 public class XmlMailTemplate implements MailTemplate {
-    private static final Logger LOG = LoggerFactory.getLogger(XmlMailTemplate.class);
 
     private final String mailName;
 
     private Class<? extends TemplateEngine> defaultTemplateEngine;
     private String defaultSubject;
     private String defaultBody;
-    private final Map<String,String> snippets = Maps.newHashMap();
+    private final Map<String, String> snippets = Maps.newHashMap();
     private final Set<MailAttachmentTemplate> defaultEmbedded = Sets.newHashSet();
     private final Set<MailAttachmentTemplate> defaultAttachments = Sets.newHashSet();
 
-    private final Map<Locale,Class<? extends TemplateEngine>> templateEngine = Maps.newHashMap();
-    private final Map<Locale,String> subject = Maps.newHashMap();
-    private final Map<Locale,String> body = Maps.newHashMap();
-    private final Map<Locale,Set<MailAttachmentTemplate>> embedded = Maps.newHashMap();
-    private final Map<Locale,Set<MailAttachmentTemplate>> attachments = Maps.newHashMap();
+    private final Map<Locale, Class<? extends TemplateEngine>> templateEngine = Maps.newHashMap();
+    private final Map<Locale, String> subject = Maps.newHashMap();
+    private final Map<Locale, String> body = Maps.newHashMap();
+    private final Map<Locale, Set<MailAttachmentTemplate>> embedded = Maps.newHashMap();
+    private final Map<Locale, Set<MailAttachmentTemplate>> attachments = Maps.newHashMap();
 
 
     public XmlMailTemplate(String mailName) {
@@ -67,14 +66,22 @@ public class XmlMailTemplate implements MailTemplate {
         return mailName;
     }
 
-    public void addDefinitions(MailType mail) {
+    /**
+     * Adds teh {@link MailType} definition to this template.
+     * 
+     * @param mail the mail type definition
+     */
+    /* CHECKSTYLE:OFF */
+    void addDefinitions(MailType mail) {
+    /* CHECKSTYLE:ON */
         // default settings
         if (mail.getDefault() != null) {
-            DefaultType defaultTemplate = mail.getDefault();
+            final DefaultType defaultTemplate = mail.getDefault();
 
             if (defaultTemplate.getTemplateEngine() != null) {
                 try {
-                    defaultTemplateEngine = (Class<? extends TemplateEngine>)Class.forName(defaultTemplate.getTemplateEngine());
+                    final String className = defaultTemplate.getTemplateEngine();
+                    defaultTemplateEngine = Reflection.forName(className).asSubclass(TemplateEngine.class);
                 } catch (ClassNotFoundException e) {
                     throw new IllegalArgumentException(e);
                 }
@@ -86,28 +93,31 @@ public class XmlMailTemplate implements MailTemplate {
                 defaultBody = defaultTemplate.getBody();
             }
 
-            for (SnippetType snippet: defaultTemplate.getSnippet()) {
+            for (SnippetType snippet : defaultTemplate.getSnippet()) {
                 snippets.put(snippet.getName(), snippet.getValue());
             }
-            for (AttachmentType attachment: defaultTemplate.getEmbedded()) {
+            for (AttachmentType attachment : defaultTemplate.getEmbedded()) {
                 defaultEmbedded.add(new XmlMailAttachment(attachment));
             }
-            for (AttachmentType attachment: defaultTemplate.getAttachment()) {
+            for (AttachmentType attachment : defaultTemplate.getAttachment()) {
                 defaultAttachments.add(new XmlMailAttachment(attachment));
             }
         }
 
-        for (LocalizedType localized: mail.getLocalized()) {
-            Locale locale = new Locale(localized.getLocale());
+        for (LocalizedType localized : mail.getLocalized()) {
+            final Locale locale = new Locale(localized.getLocale());
 
             if (localized.getTemplateEngine() != null) {
-                Class<? extends TemplateEngine> cls;
+                final Class<? extends TemplateEngine> templateEngineClass;
+                
                 try {
-                    cls = (Class<? extends TemplateEngine>) Class.forName(localized.getTemplateEngine());
+                    final String className = localized.getTemplateEngine();
+                    templateEngineClass = Reflection.forName(className).asSubclass(TemplateEngine.class);
                 } catch (ClassNotFoundException e) {
                     throw new IllegalArgumentException(e);
                 }
-                templateEngine.put(locale, cls);
+                
+                templateEngine.put(locale, templateEngineClass);
             }
             if (localized.getSubject() != null) {
                 subject.put(locale, localized.getSubject());
@@ -116,29 +126,32 @@ public class XmlMailTemplate implements MailTemplate {
                 body.put(locale, localized.getBody());
             }
 
-            Set<MailAttachmentTemplate> embedded = this.embedded.get(locale);
-            if (embedded == null) {
-                embedded = Sets.newHashSet();
-                this.embedded.put(locale, embedded);
+            Set<MailAttachmentTemplate> localizedEmbeds = this.embedded.get(locale);
+            if (localizedEmbeds == null) {
+                localizedEmbeds = Sets.newHashSet();
+                this.embedded.put(locale, localizedEmbeds);
             }
-            for (AttachmentType attachment: localized.getEmbedded()) {
-                embedded.add(new XmlMailAttachment(attachment));
+            for (AttachmentType attachment : localized.getEmbedded()) {
+                localizedEmbeds.add(new XmlMailAttachment(attachment));
             }
 
-            Set<MailAttachmentTemplate> attachments = this.attachments.get(locale);
-            if (attachments == null) {
-                attachments = Sets.newHashSet();
-                this.attachments.put(locale, attachments);
+            Set<MailAttachmentTemplate> localizedAttachments = this.attachments.get(locale);
+            if (localizedAttachments == null) {
+                localizedAttachments = Sets.newHashSet();
+                this.attachments.put(locale, localizedAttachments);
             }
-            for (AttachmentType attachment: localized.getEmbedded()) {
-                attachments.add(new XmlMailAttachment(attachment));
+            for (AttachmentType attachment : localized.getEmbedded()) {
+                localizedAttachments.add(new XmlMailAttachment(attachment));
             }
         }
     }
 
     @Override
     public LocalizedMailTemplate createLocalized(final Locale locale) {
+        /* CHECKSTYLE:OFF */
         return new LocalizedMailTemplate() {
+        /* CHECKSTYLE:ON */
+            
             @Override
             public String getName() {
                 return XmlMailTemplate.this.getName();
@@ -173,20 +186,20 @@ public class XmlMailTemplate implements MailTemplate {
 
             @Override
             public Set<MailAttachmentTemplate> getEmbedded() {
-                Set<MailAttachmentTemplate> embedded = Sets.newHashSet(defaultEmbedded);
-                if (XmlMailTemplate.this.embedded.containsKey(locale)) {
-                    embedded.addAll(XmlMailTemplate.this.embedded.get(locale));
+                final Set<MailAttachmentTemplate> concreteEmbedded = Sets.newHashSet(defaultEmbedded);
+                if (embedded.containsKey(locale)) {
+                    concreteEmbedded.addAll(embedded.get(locale));
                 }
-                return embedded;
+                return concreteEmbedded;
             }
 
             @Override
             public Set<MailAttachmentTemplate> getAttachments() {
-                Set<MailAttachmentTemplate> attachments = Sets.newHashSet(defaultAttachments);
-                if (XmlMailTemplate.this.attachments.containsKey(locale)) {
-                    attachments.addAll(XmlMailTemplate.this.attachments.get(locale));
+                final Set<MailAttachmentTemplate> concreteAttachments = Sets.newHashSet(defaultAttachments);
+                if (attachments.containsKey(locale)) {
+                    concreteAttachments.addAll(attachments.get(locale));
                 }
-                return attachments;
+                return concreteAttachments;
             }
 
             @Override
@@ -201,4 +214,5 @@ public class XmlMailTemplate implements MailTemplate {
             }
         };
     }
+    
 }

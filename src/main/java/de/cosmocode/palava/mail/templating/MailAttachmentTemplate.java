@@ -18,17 +18,35 @@ package de.cosmocode.palava.mail.templating;
 
 import java.util.Map;
 
+import de.cosmocode.palava.mail.attachments.MailAttachment;
 import de.cosmocode.palava.mail.attachments.MailAttachmentSource;
 
 /**
+ * A template for {@link MailAttachment}s.
+ * 
  * @author Tobias Sarnowski
  */
 public interface MailAttachmentTemplate {
     
+    /**
+     * Provides the name of this template.
+     * 
+     * @return the name
+     */
     String getName();
 
+    /**
+     * Provides the source of this template.
+     * 
+     * @return the source
+     */
     Class<? extends MailAttachmentSource> getSource();
 
+    /**
+     * Provices the configuration of this template.
+     * 
+     * @return the configuration
+     */
     Map<String, String> getConfiguration();
     
 }

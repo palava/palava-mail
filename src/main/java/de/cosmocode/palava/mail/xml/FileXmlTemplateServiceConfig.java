@@ -18,14 +18,19 @@ package de.cosmocode.palava.mail.xml;
 
 import de.cosmocode.palava.mail.MailConfig;
 
-
 /**
+ * Static constant holder class for xml/file template service.
+ * 
  * @author Tobias Sarnowski
  */
-public class FileXmlTemplateServiceConfig {
+public final class FileXmlTemplateServiceConfig {
 
     public static final String PREFIX = MailConfig.PREFIX + "templates.";
 
     public static final String DIRECTORY = PREFIX + "directory"; 
 
+    private FileXmlTemplateServiceConfig() {
+        
+    }
+    
 }

@@ -19,12 +19,25 @@ package de.cosmocode.palava.mail.templating;
 import java.util.Locale;
 
 /**
+ * A template for mail messages.
+ * 
  * @author Tobias Sarnowski
  */
 public interface MailTemplate {
     
+    /**
+     * Provices the name of this template.
+     * 
+     * @return the name
+     */
     String getName();
     
+    /**
+     * Creates a localized mail template using the specified locale.
+     * 
+     * @param locale the locale
+     * @return a localized mail template
+     */
     LocalizedMailTemplate createLocalized(Locale locale);
     
 }

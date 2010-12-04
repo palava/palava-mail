@@ -16,8 +16,21 @@
 
 package de.cosmocode.palava.services.mail;
 
+/**
+ * A template descriptor is used to identify templates.
+ * It's often used with enums to provide reusability.
+ * 
+ * @deprecated no need to use this anymore
+ * @author Willi Schoenborn
+ */
+@Deprecated
 public interface TemplateDescriptor {
 
+    /**
+     * Provides the name of the template.
+     * 
+     * @return the template's name
+     */
     String getName();
     
 }

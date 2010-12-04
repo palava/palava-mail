@@ -118,7 +118,6 @@ final class DefaultPop3SessionProvider implements Provider<Session>, Initializab
 
     @Override
     public Session get() {
-        // FIXME default is a singleton
         return Session.getDefaultInstance(configuration, authenticator);
     }
     

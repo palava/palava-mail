@@ -33,7 +33,6 @@ public final class DefaultSmtpSessionModule implements Module {
     @Override
     public void configure(Binder binder) {
         binder.bind(DefaultSmtpSessionProvider.class).in(Singleton.class);
-        // TODO session is unscoped?
         binder.bind(Session.class).annotatedWith(Smtp.class).toProvider(DefaultSmtpSessionProvider.class);
     }
 

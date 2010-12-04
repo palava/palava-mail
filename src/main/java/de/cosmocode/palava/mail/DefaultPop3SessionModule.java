@@ -33,7 +33,6 @@ public final class DefaultPop3SessionModule implements Module {
     @Override
     public void configure(Binder binder) {
         binder.bind(DefaultPop3SessionProvider.class).in(Singleton.class);
-        // TODO session is unscoped?
         binder.bind(Session.class).annotatedWith(Pop3.class).toProvider(DefaultPop3SessionProvider.class);
     }
 

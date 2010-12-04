@@ -16,22 +16,21 @@
 
 package de.cosmocode.palava.mail.xml;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.Binder;
 import com.google.inject.Module;
 
 import de.cosmocode.palava.mail.MailService;
 
 /**
+ * Binds {@link MailService} to {@link FileXmlTemplateService}.
+ * 
  * @author Tobias Sarnowski
  */
 public class FileXmlTemplateServiceModule implements Module {
-    private static final Logger LOG = LoggerFactory.getLogger(FileXmlTemplateServiceModule.class);
 
     @Override
     public void configure(Binder binder) {
         binder.bind(MailService.class).to(FileXmlTemplateService.class).asEagerSingleton();
     }
+    
 }
